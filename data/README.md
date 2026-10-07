@@ -1,1 +1,2 @@
-Place fraudTrain.csv downloaded via the Task 2 dataset link here. Required label is is_fraud. The dataset is not committed. Do not publish personal or transaction-level records.
+Download the Credit Card Transactions Fraud Detection dataset from Kaggle: https://www.kaggle.com/datasets/kartik2112/fraud-detection
+Place `fraudTrain.csv` in this directory. The label column is `is_fraud`. Do not commit raw transaction data.

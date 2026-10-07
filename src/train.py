@@ -25,10 +25,9 @@ def main():
         parser.error('is_fraud must contain both 0 and 1')
     data = data.drop(columns=['is_fraud'])
     if 'trans_date_trans_time' in data:
-        timestamp = pd.to_datetime(data.pop('trans_date_trans_time'), errors='coerce')
-        data['hour'] = timestamp.dt.hour
-        data['day_of_week'] = timestamp.dt.dayofweek
-    # Exclude IDs, free text, and direct personal identifiers.
+        ts = pd.to_datetime(data.pop('trans_date_trans_time'), errors='coerce')
+        data['hour'] = ts.dt.hour
+        data['day_of_week'] = ts.dt.dayofweek
     excluded = ['Unnamed: 0', 'trans_num', 'cc_num', 'first', 'last', 'street', 'dob', 'merchant', 'job', 'city', 'state', 'zip']
     data = data.drop(columns=excluded, errors='ignore')
     numeric = data.select_dtypes(include='number').columns.tolist()
@@ -36,9 +35,7 @@ def main():
     x = data[numeric + categorical]
     if x.shape[1] == 0:
         parser.error('No usable features found')
-    x_train, x_test, y_train, y_test = train_test_split(
-        x, y, test_size=0.2, stratify=y, random_state=42
-    )
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
     preprocess = ColumnTransformer([
         ('num', Pipeline([('impute', SimpleImputer(strategy='median')), ('scale', StandardScaler())]), numeric),
         ('cat', Pipeline([('impute', SimpleImputer(strategy='most_frequent')), ('encode', OneHotEncoder(handle_unknown='ignore'))]), categorical),

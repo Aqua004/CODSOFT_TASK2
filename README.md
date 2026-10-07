@@ -1,21 +1,21 @@
 # Credit Card Fraud Detection (CodSoft Task 2)
 
-Binary transaction classifier using a leakage-safe preprocessing pipeline and class-weighted logistic regression.
+Detect fraudulent transactions using the Kaggle dataset: https://www.kaggle.com/datasets/kartik2112/fraud-detection
 
 ## Dataset
-Download the dataset linked in the CodSoft Task 2 PDF and place `fraudTrain.csv` in `data/`. This project targets the common dataset with an `is_fraud` label; if your download uses another schema, adjust the parser before training. Never publish raw financial or personal data.
+Download the dataset and place `fraudTrain.csv` in `data/`. The label column is `is_fraud` (0 = legitimate, 1 = fraud). The test file `fraudTest.csv` is for final evaluation; this project uses a holdout split from `fraudTrain.csv` for reproducible metrics. Do not commit raw transaction data.
 
 ## Run
 ```bash
 python -m venv .venv
-# Activate the environment
+# Activate the virtual environment
 pip install -r requirements.txt
 python src/train.py --data data/fraudTrain.csv
 ```
-Outputs: `results/metrics.json` and `models/fraud_model.joblib` (gitignored). Inspect fraud-class precision and recall, average precision (PR-AUC), ROC-AUC, and confusion matrix rather than accuracy alone. The holdout split is stratified; all imputers, encoders, and scaling fit on training data only. For production-like testing, use a future time-period holdout and entity-aware checks.
+Outputs: `models/fraud_model.joblib` and `results/metrics.json` (both gitignored). Reports fraud-class precision/recall/F1, ROC-AUC, PR-AUC, and confusion matrix. All preprocessing is fit after the stratified split.
 
-## Demo / submission
-Record a training run and explain class imbalance and errors. Add observed numbers only after running on your dataset.
+## Submission
+Run on your downloaded dataset, record a demo video, and add measured results here only after verifying them.
 
 ## Results
 Not yet run or independently verified.
