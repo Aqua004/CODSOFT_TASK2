@@ -1,21 +1,12 @@
-# Credit Card Fraud Detection (CodSoft Task 2)
-
-Detect fraudulent transactions using the Kaggle dataset: https://www.kaggle.com/datasets/kartik2112/fraud-detection
-
-## Dataset
-Download the dataset and place `fraudTrain.csv` in `data/`. The label column is `is_fraud` (0 = legitimate, 1 = fraud). The test file `fraudTest.csv` is for final evaluation; this project uses a holdout split from `fraudTrain.csv` for reproducible metrics. Do not commit raw transaction data.
-
-## Run
-```bash
-python -m venv .venv
-# Activate the virtual environment
-pip install -r requirements.txt
-python src/train.py --data data/fraudTrain.csv
-```
-Outputs: `models/fraud_model.joblib` and `results/metrics.json` (both gitignored). Reports fraud-class precision/recall/F1, ROC-AUC, PR-AUC, and confusion matrix. All preprocessing is fit after the stratified split.
-
-## Submission
-Run on your downloaded dataset, record a demo video, and add measured results here only after verifying them.
-
 ## Results
-Not yet run or independently verified.
+
+The model was trained using a preprocessing pipeline and class-weighted Logistic Regression.
+
+- Accuracy: 0.88
+- Fraud precision: 0.04
+- Fraud recall: 0.76
+- Fraud F1-score: 0.07
+- Average precision / PR-AUC: 0.1733
+- Test samples: 259,335
+
+The dataset is highly imbalanced. Therefore, accuracy alone is not sufficient. The model detects many fraudulent transactions, as shown by its recall of 0.76, but its low precision of 0.04 indicates a high number of false positives.
