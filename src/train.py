@@ -3,11 +3,12 @@ import json
 from pathlib import Path
 
 import joblib
+import matplotlib.pyplot as plt
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import average_precision_score, classification_report, confusion_matrix, roc_auc_score
+from sklearn.metrics import ConfusionMatrixDisplay, average_precision_score, classification_report, confusion_matrix, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -44,11 +45,25 @@ def main():
     model.fit(x_train, y_train)
     predictions = model.predict(x_test)
     scores = model.predict_proba(x_test)[:, 1]
+
+    cm = confusion_matrix(y_test, predictions, labels=[0, 1])
+    ConfusionMatrixDisplay.from_predictions(
+        y_test,
+        predictions,
+        display_labels=['Not Fraud', 'Fraud'],
+        cmap='Blues',
+        colorbar=True
+    )
+    plt.title('Credit Card Fraud Detection - Confusion Matrix')
+    plt.tight_layout()
+    plt.savefig('results/confusion_matrix.png', dpi=200)
+    plt.close()
+
     metrics = {
         'fraud_rate_test': float(y_test.mean()),
         'average_precision': average_precision_score(y_test, scores),
         'roc_auc': roc_auc_score(y_test, scores),
-        'confusion_matrix': confusion_matrix(y_test, predictions).tolist(),
+        'confusion_matrix': cm.tolist(),
         'classification_report': classification_report(y_test, predictions, output_dict=True, zero_division=0),
     }
     Path('models').mkdir(exist_ok=True)
@@ -57,6 +72,7 @@ def main():
     Path('results/metrics.json').write_text(json.dumps(metrics, indent=2), encoding='utf-8')
     print(classification_report(y_test, predictions, zero_division=0))
     print(f'Average precision: {metrics["average_precision"]:.4f}')
+    print('Confusion matrix saved to results/confusion_matrix.png')
 
 
 if __name__ == '__main__':

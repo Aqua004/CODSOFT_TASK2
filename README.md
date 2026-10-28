@@ -21,6 +21,27 @@ pip install -r requirements.txt
 python src/train.py --data data/fraudTrain.csv
 ```
 
+## Confusion Matrix
+After training, the script saves a confusion-matrix image at:
+
+```text
+results/confusion_matrix.png
+```
+
+It also saves the numeric matrix in `results/metrics.json` under `confusion_matrix`.
+
+|  | Predicted: Not Fraud | Predicted: Fraud |
+|---|---:|---:|
+| **Actual: Not Fraud** | True Negative (TN) | False Positive (FP) |
+| **Actual: Fraud** | False Negative (FN) | True Positive (TP) |
+
+- **True Negative:** Legitimate transaction correctly classified as legitimate.
+- **False Positive:** Legitimate transaction incorrectly flagged as fraud.
+- **False Negative:** Fraudulent transaction missed by the model.
+- **True Positive:** Fraudulent transaction correctly detected.
+
+For fraud detection, the most important cells are **False Negative** and **True Positive**: a high True Positive count and low False Negative count mean the model detects more actual fraud cases.
+
 ## Verified Results
 The project was run locally on the downloaded dataset.
 
@@ -34,4 +55,4 @@ The project was run locally on the downloaded dataset.
 The dataset is highly imbalanced: the test split contained 1,501 fraud transactions and 257,834 legitimate transactions. Accuracy is therefore not a sufficient quality measure. The baseline detects 76% of fraud cases but has low precision, meaning it creates many false-positive fraud alerts. Improving threshold selection, feature engineering, and model choice would be appropriate next steps.
 
 ## Output
-Training saves `models/fraud_model.joblib` and `results/metrics.json` locally. Both are excluded from Git.
+Training saves `models/fraud_model.joblib`, `results/metrics.json`, and `results/confusion_matrix.png` locally. These files are excluded from Git.
