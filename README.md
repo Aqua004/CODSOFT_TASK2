@@ -10,7 +10,7 @@ Download the dataset and place `fraudTrain.csv` in `data/`. The label column is 
 - Preprocessing: median imputation and scaling for numeric fields; most-frequent imputation and one-hot encoding for categorical fields.
 - Model: class-weighted Logistic Regression.
 - Evaluation: stratified 80/20 train/test split with `random_state=42`.
-- Metrics: fraud-class precision, recall, F1, average precision (PR-AUC), ROC-AUC, and confusion matrix.
+- Metrics: fraud-class precision, recall, F1, average precision (PR-AUC), ROC-AUC, confusion matrix, and ROC curve.
 
 ## Run
 ```bash
@@ -42,6 +42,15 @@ It also saves the numeric matrix in `results/metrics.json` under `confusion_matr
 
 For fraud detection, the most important cells are **False Negative** and **True Positive**: a high True Positive count and low False Negative count mean the model detects more actual fraud cases.
 
+## ROC-AUC Curve
+After training, the script saves the ROC-AUC curve at:
+
+```text
+results/roc_curve.png
+```
+
+The ROC curve shows the trade-off between the True Positive Rate and False Positive Rate at different classification thresholds. The dashed diagonal line represents random guessing; a curve farther above this line indicates better fraud-detection performance. The area under this curve is the ROC-AUC score, which is also saved in `results/metrics.json`.
+
 ## Verified Results
 The project was run locally on the downloaded dataset.
 
@@ -55,4 +64,4 @@ The project was run locally on the downloaded dataset.
 The dataset is highly imbalanced: the test split contained 1,501 fraud transactions and 257,834 legitimate transactions. Accuracy is therefore not a sufficient quality measure. The baseline detects 76% of fraud cases but has low precision, meaning it creates many false-positive fraud alerts. Improving threshold selection, feature engineering, and model choice would be appropriate next steps.
 
 ## Output
-Training saves `models/fraud_model.joblib`, `results/metrics.json`, and `results/confusion_matrix.png` locally. These files are excluded from Git.
+Training saves `models/fraud_model.joblib`, `results/metrics.json`, `results/confusion_matrix.png`, and `results/roc_curve.png` locally. These files are excluded from Git.

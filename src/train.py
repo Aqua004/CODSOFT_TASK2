@@ -8,7 +8,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import ConfusionMatrixDisplay, average_precision_score, classification_report, confusion_matrix, roc_auc_score
+from sklearn.metrics import ConfusionMatrixDisplay, RocCurveDisplay, average_precision_score, classification_report, confusion_matrix, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
@@ -59,6 +59,19 @@ def main():
     plt.savefig('results/confusion_matrix.png', dpi=200)
     plt.close()
 
+    RocCurveDisplay.from_predictions(
+        y_test,
+        scores,
+        name='Logistic Regression',
+        color='darkorange'
+    )
+    plt.plot([0, 1], [0, 1], linestyle='--', color='gray', label='Random classifier')
+    plt.title('Credit Card Fraud Detection - ROC-AUC Curve')
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig('results/roc_curve.png', dpi=200)
+    plt.close()
+
     metrics = {
         'fraud_rate_test': float(y_test.mean()),
         'average_precision': average_precision_score(y_test, scores),
@@ -72,7 +85,9 @@ def main():
     Path('results/metrics.json').write_text(json.dumps(metrics, indent=2), encoding='utf-8')
     print(classification_report(y_test, predictions, zero_division=0))
     print(f'Average precision: {metrics["average_precision"]:.4f}')
+    print(f'ROC-AUC: {metrics["roc_auc"]:.4f}')
     print('Confusion matrix saved to results/confusion_matrix.png')
+    print('ROC-AUC curve saved to results/roc_curve.png')
 
 
 if __name__ == '__main__':
